@@ -9,7 +9,7 @@ var Bullet = {
 
   create: function(entity, opts) {
     if (opts.rotate) {
-      entity.rotation = opts.angle;
+      entity.rotation = opts.angle
     }
   },
 
