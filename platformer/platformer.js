@@ -28,14 +28,14 @@ var Platformer = {
         }
         
         for(var i = 0; i < controls.length; ++i) {
-            if (options.controls === DEFAULT_CONTROLS) {
-                options.__cursor = object.game.input.keyboard.createCursorKeys();
+            if (options.controls[i] === DEFAULT_CONTROLS) {
+                options._cursor_arrows = object.game.input.keyboard.createCursorKeys();
             }
         }
     },
 
     preUpdate: function (object, options) {
-        var cursor = options.__cursor;
+        var cursor = options._cursor_arrows;
         var velocity = options.velocity;
         if (cursor.left.isDown) {
             object.body.velocity.x = -velocity;
