@@ -50,3 +50,8 @@ var Platformer = {
         }
     }
 };
+
+if (window.Phaser) {
+  Phaser.Behavior = Phaser.Behavior || {};
+  Phaser.Behavior.Platformer = Platformer;
+}
