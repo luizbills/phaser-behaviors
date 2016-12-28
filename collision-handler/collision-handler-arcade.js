@@ -29,7 +29,7 @@
 
     if (Phaser !== NULL) {
         Phaser.Behavior = Phaser.Behavior || {}
-        Phaser.Behavior.Bullet = Bullet
+        Phaser.Behavior.CollisionHandler = CollisionHandler
     }
 
 })(window.Phaser)
