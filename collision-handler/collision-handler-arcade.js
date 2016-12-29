@@ -1,6 +1,22 @@
-;(function (Phaser, NULL) {
+;(function (root, factory, NULL) {
+    var BEHAVIOR_GLOBAL_NAME = 'CollisionHandler';
 
-    var CollisionHandler = {
+    if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = factory();
+    } else {
+        var Phaser = root.Phaser;
+        if (Phaser === NULL) {
+            root[BEHAVIOR_GLOBAL_NAME] = factory();
+        } else {
+            Phaser.Behavior = Phaser.Behavior || {};
+            Phaser.Behavior[BEHAVIOR_GLOBAL_NAME] = factory();
+        }
+    }
+}(this, function (NULL) {
+
+    var Behavior = {
 
         // default settings
         options: {
@@ -12,24 +28,21 @@
         },
 
         update: function (object, opts) {
-            var targets = opts.targets;
+            var targets = opts.targets,
+                method = opts.method;
             
             // multiple targets
             if (Array.isArray(targets) === true) {
                 var max = opts.targets.length;
                 for (var i = 0; i < max; ++i ) {
-                    object.game.physics.arcade[opts.method](object, targets[i], opts.collideCallback, opts.processCallback, opts.callbackContext);
+                    object.game.physics.arcade[method](object, targets[i], opts.collideCallback, opts.processCallback, opts.callbackContext);
                 }
             // single target
             } else {
-                object.game.physics.arcade[opts.method](object, targets, opts.collideCallback, opts.processCallback, opts.callbackContext);
+                object.game.physics.arcade[method](object, targets, opts.collideCallback, opts.processCallback, opts.callbackContext);
             }
         }
     };
 
-    if (Phaser !== NULL) {
-        Phaser.Behavior = Phaser.Behavior || {}
-        Phaser.Behavior.CollisionHandler = CollisionHandler
-    }
-
-})(window.Phaser)
+    return Behavior;
+}));
