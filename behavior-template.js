@@ -1,6 +1,6 @@
 ;(function (root, factory, NULL) {
     var BEHAVIOR_GLOBAL_NAME = 'ChangeThis';
-    
+
     if (typeof define === 'function' && define.amd) {
         define(factory);
     } else if (typeof module === 'object' && module.exports) {
@@ -13,7 +13,7 @@
             Phaser.Behavior = Phaser.Behavior || {};
             Phaser.Behavior[BEHAVIOR_GLOBAL_NAME] = factory();
         }
-  }
+    }
 }(this, function (NULL) {
 
     var Behavior = {
