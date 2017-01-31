@@ -16,17 +16,17 @@ var Platformer = {
     create: function (object, options) {
         var gravity = options.gravity;
         var controls = options.controls;
-        
+
         if (gravity > 0) {
             object.body.gravity.y = gravity;
         }
-        
+
         if (controls === false) return; // skip controls setup
-        
+
         if (Array.isArray(controls) === false) {
             controls = [controls]
         }
-        
+
         for(var i = 0; i < controls.length; ++i) {
             if (options.controls[i] === DEFAULT_CONTROLS) {
                 options._cursor_arrows = object.game.input.keyboard.createCursorKeys();
@@ -45,7 +45,7 @@ var Platformer = {
             object.body.velocity.x = 0;
         }
 
-        if (cursor.up.isDown && object.body.touching.down) {
+        if (cursor.up.isDown && (object.body.touching.down || object.body.blocked.down)) {
             object.body.velocity.y = -options.jumpStrength;
         }
     }
