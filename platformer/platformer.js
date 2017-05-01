@@ -1,8 +1,3 @@
-var DEFAULT_CONTROLS = 0; // arrows
-// TODO
-// var AWSD_CONTROLS = 1;
-// var JUMP_ON_SPACE = 2;
-
 var Platformer = {
 
     // defaults settings
@@ -10,7 +5,11 @@ var Platformer = {
         gravity: 600,
         velocity: 200,
         jumpStrength: 250,
-        controls: [DEFAULT_CONTROLS]
+        controls: {
+            left: [Phaser.KeyCode.LEFT],
+            right: [Phaser.KeyCode.RIGHT],
+            jump: [Phaser.KeyCode.UP]
+        }
     },
 
     create: function (object, options) {
@@ -21,33 +20,46 @@ var Platformer = {
             object.body.gravity.y = gravity;
         }
 
-        if (controls === false) return; // skip controls setup
-
-        if (Array.isArray(controls) === false) {
-            controls = [controls]
-        }
-
-        for(var i = 0; i < controls.length; ++i) {
-            if (options.controls[i] === DEFAULT_CONTROLS) {
-                options._cursor_arrows = object.game.input.keyboard.createCursorKeys();
-            }
-        }
+        options._control_keys = {
+            left: this._addKeys(object.game, controls.left),
+            right: this._addKeys(object.game, controls.right),
+            jump: this._addKeys(object.game, controls.jump)
+        };
     },
 
     preUpdate: function (object, options) {
-        var cursor = options._cursor_arrows;
+        var controlKeys = options._control_keys;
         var velocity = options.velocity;
-        if (cursor.left.isDown) {
+
+        if (this._isDown(controlKeys.left)) {
             object.body.velocity.x = -velocity;
-        } else if (cursor.right.isDown) {
+        } else if (this._isDown(controlKeys.right)) {
             object.body.velocity.x = velocity;
         } else {
             object.body.velocity.x = 0;
         }
 
-        if (cursor.up.isDown && (object.body.touching.down || object.body.blocked.down)) {
+        if (this._isDown(controlKeys.jump) && (object.body.touching.down || object.body.blocked.down)) {
             object.body.velocity.y = -options.jumpStrength;
         }
+    },
+
+    _addKeys: function(game, keyCodes) {
+        if (!Array.isArray(keyCodes)) {
+            keyCodes = [keyCodes];
+        }
+        return keyCodes.map(function(keyCode) {
+            return game.input.keyboard.addKey(keyCode);
+        });
+    },
+
+    _isDown: function(keys) {
+        for (let key of keys) {
+            if (key.isDown) {
+                return true;
+            }
+        }
+        return false;
     }
 };
 
